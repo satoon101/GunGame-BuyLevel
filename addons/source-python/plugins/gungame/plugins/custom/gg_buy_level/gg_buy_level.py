@@ -45,7 +45,7 @@ def _give_kill_reward(game_event):
     if victim.team == killer.team:
         return
 
-    player_cash[killer] += kill_reward.get_int()
+    _give_cash(killer, kill_reward.get_int())
 
 
 # =============================================================================
@@ -53,7 +53,8 @@ def _give_kill_reward(game_event):
 # =============================================================================
 @Event('gg_level_up')
 def _give_level_reward(game_event):
-    player_cash[game_event['leveler']] += level_reward.get_int()
+    if game_event['reason'] != 'buy':
+        _give_cash(game_event['leveler'], level_reward.get_int())
 
 
 # =============================================================================
