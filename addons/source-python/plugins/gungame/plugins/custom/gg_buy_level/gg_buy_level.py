@@ -45,7 +45,7 @@ def _give_kill_reward(game_event):
     if victim.team == killer.team:
         return
 
-    _give_cash(killer, kill_reward.get_int())
+    _give_cash(attacker, kill_reward.get_int())
 
 
 # =============================================================================
