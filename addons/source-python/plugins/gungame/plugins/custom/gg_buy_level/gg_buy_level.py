@@ -17,6 +17,7 @@ from players.entity import Player
 
 # GunGame
 from gungame.core.players.dictionary import player_dictionary
+from gungame.core.status import GunGameMatchStatus, GunGameStatus
 
 # Plugin
 from .configuration import (
@@ -35,6 +36,9 @@ player_cash = defaultdict(int)
 # =============================================================================
 @Event('player_death')
 def _give_kill_reward(game_event):
+    if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
+        return
+
     userid = game_event['userid']
     attacker = game_event['attacker']
     if attacker in (userid, 0):
@@ -62,6 +66,9 @@ def _give_level_reward(game_event):
 # =============================================================================
 @EntityPostHook(EntityCondition.is_player, 'add_account')
 def _set_cash(args, return_value):
+    if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
+        return
+
     with suppress(ValueError):
         player = make_object(Player, args[0])
         player.cash = player_cash[player.userid]
