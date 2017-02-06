@@ -1,6 +1,6 @@
 # ../gungame/plugins/custom/gg_buy_level/gg_buy_level.py
 
-"""."""
+"""Plugin allows layers to purchase levels with cash they earn."""
 
 # =============================================================================
 # >> IMPORTS
