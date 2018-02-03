@@ -1,4 +1,4 @@
-# ../gungame/plugins/included/gg_buy_level/info.py
+# ../gungame/plugins/custom/gg_buy_level/info.py
 
 """Contains plugin information."""
 
