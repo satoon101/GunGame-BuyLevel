@@ -46,7 +46,7 @@ def _give_kill_reward(game_event):
 
     victim = player_dictionary[userid]
     killer = player_dictionary[attacker]
-    if victim.team == killer.team:
+    if victim.team_index == killer.team_index:
         return
 
     _give_cash(attacker, kill_reward.get_int())
@@ -78,11 +78,14 @@ def _set_cash(args, return_value):
 # >> HELPER FUNCTIONS
 # =============================================================================
 def _give_cash(userid, value):
-    previously_earned = bool(player_cash[userid])
+    previously_earned = player_cash[userid]
     player_cash[userid] += value
 
     player = player_dictionary[userid]
-    player.cash = player_cash[userid]
+    try:
+        player.cash = player_cash[userid]
+    except OverflowError:
+        player_cash[userid] = player.cash = previously_earned
     amount = start_amount.get_int()
     amount += player.level * level_increase.get_int()
 
