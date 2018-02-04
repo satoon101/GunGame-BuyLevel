@@ -12,6 +12,9 @@ from gungame.core.status import GunGameMatchStatus, GunGameStatus
 from gungame.core.weapons.groups import melee_weapons, all_grenade_weapons
 from gungame.core.weapons.manager import weapon_order_manager
 
+# Plugin
+from . import player_cash
+
 
 # =============================================================================
 # >> FUNCTIONS
@@ -78,3 +81,4 @@ def _buy_level_callback(index):
         amount=amount,
     )
     player.cash -= amount
+    player_cash[player.userid] -= amount

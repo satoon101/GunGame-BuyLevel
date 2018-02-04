@@ -6,7 +6,6 @@
 # >> IMPORTS
 # =============================================================================
 # Python
-from collections import defaultdict
 from contextlib import suppress
 
 # Source.Python
@@ -20,15 +19,10 @@ from gungame.core.players.dictionary import player_dictionary
 from gungame.core.status import GunGameMatchStatus, GunGameStatus
 
 # Plugin
+from . import player_cash
 from .configuration import (
     level_increase, level_reward, kill_reward, start_amount,
 )
-
-
-# =============================================================================
-# >> GLOBAL VARIABLES
-# =============================================================================
-player_cash = defaultdict(int)
 
 
 # =============================================================================
