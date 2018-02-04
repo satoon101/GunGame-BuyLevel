@@ -52,7 +52,7 @@ def _buy_level_callback(index):
         return
 
     amount = start_amount.get_int()
-    amount += player.level * level_increase.get_int()
+    amount += (player.level - 1) * level_increase.get_int()
 
     if amount > player.cash:
         player.chat_message(
