@@ -36,6 +36,7 @@ player_cash = defaultdict(int)
 # =============================================================================
 @Event('player_death')
 def _give_kill_reward(game_event):
+    """Give cash for the kill."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
 
@@ -46,7 +47,7 @@ def _give_kill_reward(game_event):
 
     victim = player_dictionary[userid]
     killer = player_dictionary[attacker]
-    if victim.team == killer.team:
+    if victim.team_index == killer.team_index:
         return
 
     _give_cash(attacker, kill_reward.get_int())
@@ -57,6 +58,7 @@ def _give_kill_reward(game_event):
 # =============================================================================
 @Event('gg_level_up')
 def _give_level_reward(game_event):
+    """Give cash for leveling up."""
     if game_event['reason'] != 'buy':
         _give_cash(game_event['leveler'], level_reward.get_int())
 
@@ -66,6 +68,7 @@ def _give_level_reward(game_event):
 # =============================================================================
 @EntityPostHook(EntityCondition.is_player, 'add_account')
 def _set_cash(args, return_value):
+    """Hook AddAccount to make sure to only set to the buy_level value."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
 
@@ -78,15 +81,19 @@ def _set_cash(args, return_value):
 # >> HELPER FUNCTIONS
 # =============================================================================
 def _give_cash(userid, value):
-    previously_earned = bool(player_cash[userid])
+    """Give the player the cash."""
+    previously_earned = player_cash[userid]
     player_cash[userid] += value
 
     player = player_dictionary[userid]
-    player.cash = player_cash[userid]
+    try:
+        player.cash = player_cash[userid]
+    except OverflowError:
+        player_cash[userid] = player.cash = previously_earned
     amount = start_amount.get_int()
     amount += player.level * level_increase.get_int()
 
-    if not previously_earned and player_cash[userid] >= amount:
+    if previously_earned < amount <= player_cash[userid]:
         player.chat_message(
             message='BuyLevel:Earned',
             index=player.index,
