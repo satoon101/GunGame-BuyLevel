@@ -80,5 +80,5 @@ def _buy_level_callback(index):
         index=player.index,
         amount=amount,
     )
-    player.cash -= amount
     player_cash[player.userid] -= amount
+    player.cash = player_cash[player.userid]
