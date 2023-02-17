@@ -21,6 +21,7 @@ from . import player_cash
 # =============================================================================
 @register_command_callback('buy_level', 'BuyLevel:Command')
 def _buy_level_callback(index):
+    # pylint: disable=import-outside-toplevel
     from .configuration import (
         allow_win, level_increase, start_amount, skip_knife, skip_nade,
     )

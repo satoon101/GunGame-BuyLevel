@@ -62,7 +62,7 @@ def _give_level_reward(game_event):
 # =============================================================================
 @EntityPostHook(EntityCondition.is_player, 'add_account')
 def _set_cash(args, return_value):
-    """Hook AddAccount to make sure to only set to the buy_level value."""
+    """Hooks AddAccount to make sure to only set to the buy_level value."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
 
