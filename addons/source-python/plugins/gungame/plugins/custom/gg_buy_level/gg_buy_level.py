@@ -76,18 +76,14 @@ def _set_cash(args, return_value):
 # =============================================================================
 def _give_cash(userid, value):
     """Give the player the cash."""
-    previously_earned = player_cash[userid]
     player_cash[userid] += value
 
     player = player_dictionary[userid]
-    try:
-        player.cash = player_cash[userid]
-    except OverflowError:
-        player_cash[userid] = player.cash = previously_earned
+    player.cash = player_cash[userid]
     amount = start_amount.get_int()
     amount += player.level * level_increase.get_int()
 
-    if previously_earned < amount <= player_cash[userid]:
+    if amount <= player_cash[userid]:
         player.chat_message(
             message='BuyLevel:Earned',
             index=player.index,
