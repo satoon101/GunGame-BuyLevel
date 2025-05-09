@@ -21,21 +21,24 @@ from gungame.core.status import GunGameMatchStatus, GunGameStatus
 # Plugin
 from . import player_cash
 from .configuration import (
-    level_increase, level_reward, kill_reward, start_amount,
+    kill_reward,
+    level_increase,
+    level_reward,
+    start_amount,
 )
 
 
 # =============================================================================
 # >> GAME EVENTS
 # =============================================================================
-@Event('player_death')
+@Event("player_death")
 def _give_kill_reward(game_event):
     """Give cash for the kill."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
 
-    userid = game_event['userid']
-    attacker = game_event['attacker']
+    userid = game_event["userid"]
+    attacker = game_event["attacker"]
     if attacker in (userid, 0):
         return
 
@@ -50,17 +53,17 @@ def _give_kill_reward(game_event):
 # =============================================================================
 # >> GUNGAME EVENTS
 # =============================================================================
-@Event('gg_level_up')
+@Event("gg_level_up")
 def _give_level_reward(game_event):
     """Give cash for leveling up."""
-    if game_event['reason'] != 'buy':
-        _give_cash(game_event['leveler'], level_reward.get_int())
+    if game_event["reason"] != "buy":
+        _give_cash(game_event["leveler"], level_reward.get_int())
 
 
 # =============================================================================
 # >> ENTITY HOOKS
 # =============================================================================
-@EntityPostHook(EntityCondition.is_player, 'add_account')
+@EntityPostHook(EntityCondition.is_player, "add_account")
 def _set_cash(args, return_value):
     """Hooks AddAccount to make sure to only set to the buy_level value."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
@@ -85,6 +88,6 @@ def _give_cash(userid, value):
 
     if amount <= player_cash[userid]:
         player.chat_message(
-            message='BuyLevel:Earned',
+            message="BuyLevel:Earned",
             index=player.index,
         )

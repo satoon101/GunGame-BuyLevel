@@ -9,7 +9,7 @@
 from gungame.core.commands.registration import register_command_callback
 from gungame.core.players.dictionary import player_dictionary
 from gungame.core.status import GunGameMatchStatus, GunGameStatus
-from gungame.core.weapons.groups import melee_weapons, all_grenade_weapons
+from gungame.core.weapons.groups import all_grenade_weapons, melee_weapons
 from gungame.core.weapons.manager import weapon_order_manager
 
 # Plugin
@@ -19,11 +19,14 @@ from . import player_cash
 # =============================================================================
 # >> FUNCTIONS
 # =============================================================================
-@register_command_callback('buy_level', 'BuyLevel:Command')
+@register_command_callback("buy_level", "BuyLevel:Command")
 def _buy_level_callback(index):
-    # pylint: disable=import-outside-toplevel
     from .configuration import (
-        allow_win, level_increase, start_amount, skip_knife, skip_nade,
+        allow_win,
+        level_increase,
+        skip_knife,
+        skip_nade,
+        start_amount,
     )
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
@@ -31,7 +34,7 @@ def _buy_level_callback(index):
     player = player_dictionary.from_index(index)
     if player.level_weapon in all_grenade_weapons and not skip_nade.get_bool():
         player.chat_message(
-            message='BuyLevel:Denied:Level',
+            message="BuyLevel:Denied:Level",
             index=player.index,
             weapon=player.level_weapon,
         )
@@ -39,7 +42,7 @@ def _buy_level_callback(index):
 
     if player.level_weapon in melee_weapons and not skip_knife.get_bool():
         player.chat_message(
-            message='BuyLevel:Denied:Level',
+            message="BuyLevel:Denied:Level",
             index=player.index,
             weapon=player.level_weapon,
         )
@@ -50,7 +53,7 @@ def _buy_level_callback(index):
         and not allow_win.get_bool()
     ):
         player.chat_message(
-            message='BuyLevel:Denied:Win',
+            message="BuyLevel:Denied:Win",
             index=player.index,
         )
         return
@@ -60,7 +63,7 @@ def _buy_level_callback(index):
 
     if amount > player.cash:
         player.chat_message(
-            message='BuyLevel:Denied:Cash',
+            message="BuyLevel:Denied:Cash",
             index=player.index,
             current=player.cash,
             required=amount,
@@ -68,16 +71,16 @@ def _buy_level_callback(index):
         return
 
     current = player.level
-    player.increase_level(1, 'buy')
+    player.increase_level(1, "buy")
     if player.level <= current:
         player.chat_message(
-            message='BuyLevel:Failed',
+            message="BuyLevel:Failed",
             index=player.index,
         )
         return
 
     player.chat_message(
-        message='BuyLevel:Purchased',
+        message="BuyLevel:Purchased",
         index=player.index,
         amount=amount,
     )

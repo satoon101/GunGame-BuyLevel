@@ -11,7 +11,6 @@ from collections import defaultdict
 # Source.Python
 from listeners import OnLevelInit
 
-
 # =============================================================================
 # >> GLOBAL VARIABLES
 # =============================================================================
