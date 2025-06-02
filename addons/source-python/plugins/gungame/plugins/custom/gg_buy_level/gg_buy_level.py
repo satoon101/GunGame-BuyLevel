@@ -47,7 +47,7 @@ def _give_kill_reward(game_event):
     if victim.team_index == killer.team_index:
         return
 
-    _give_cash(attacker, kill_reward.get_int())
+    _give_cash(attacker, int(kill_reward))
 
 
 # =============================================================================
@@ -57,20 +57,20 @@ def _give_kill_reward(game_event):
 def _give_level_reward(game_event):
     """Give cash for leveling up."""
     if game_event["reason"] != "buy":
-        _give_cash(game_event["leveler"], level_reward.get_int())
+        _give_cash(game_event["leveler"], int(level_reward))
 
 
 # =============================================================================
 # >> ENTITY HOOKS
 # =============================================================================
 @EntityPostHook(EntityCondition.is_player, "add_account")
-def _set_cash(args, return_value):
+def _set_cash(stack_data, return_value):
     """Hooks AddAccount to make sure to only set to the buy_level value."""
     if GunGameStatus.MATCH is not GunGameMatchStatus.ACTIVE:
         return
 
     with suppress(ValueError):
-        player = make_object(Player, args[0])
+        player = make_object(Player, stack_data[0])
         player.cash = player_cash[player.userid]
 
 
@@ -83,8 +83,8 @@ def _give_cash(userid, value):
 
     player = player_dictionary[userid]
     player.cash = player_cash[userid]
-    amount = start_amount.get_int()
-    amount += player.level * level_increase.get_int()
+    amount = int(start_amount)
+    amount += player.level * int(level_increase)
 
     if amount <= player_cash[userid]:
         player.chat_message(
